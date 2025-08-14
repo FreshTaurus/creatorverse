@@ -295,8 +295,8 @@ export default function CreatorCard({ creator }) {
               {description}
             </p>
           </div>
-        </div>
-      </article>
+      </div>
+    </article>
 
       {/* Delete Modal */}
       {showDeleteModal && (
