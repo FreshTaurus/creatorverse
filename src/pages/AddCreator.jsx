@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { supabase } from '../client';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Plus, User, Link as LinkIcon, FileText, Image } from 'lucide-react';
+import { ArrowLeft, Plus, User, Link as LinkIcon, FileText, Image, Youtube, Twitter, Instagram, Music, ExternalLink } from 'lucide-react';
 
 export default function AddCreator() {
   const [formData, setFormData] = useState({
     name: '',
     url: '',
     description: '',
-    imageURL: ''
+    imageURL: '',
+    youtube: '',
+    twitter: '',
+    instagram: '',
+    tiktok: '',
+    twitch: ''
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,9 +31,13 @@ export default function AddCreator() {
     setLoading(true);
     
     try {
+      // Only send the original database fields (filter out new social media fields)
+      const { name, url, description, imageURL } = formData;
+      const creatorData = { name, url, description, imageURL };
+      
       const { error } = await supabase
         .from('creators')
-        .insert([formData]);
+        .insert([creatorData]);
       
       if (error) {
         console.error('Error adding creator:', error);
@@ -120,36 +129,242 @@ export default function AddCreator() {
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="url" style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.5rem',
-              marginBottom: '0.5rem'
-            }}>
-              <LinkIcon size={18} />
-              Social Media URL *
-            </label>
-            <input
-              type="url"
-              id="url"
-              name="url"
-              value={formData.url}
-              onChange={handleChange}
-              placeholder="https://www.youtube.com/channel/..."
-              required
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                backgroundColor: 'var(--color-bg)',
-                border: '2px solid var(--color-border)',
-                borderRadius: 'var(--border-radius)',
-                color: 'var(--color-text)',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease'
-              }}
-            />
-          </div>
+                     <div className="form-group">
+             <label htmlFor="url" style={{ 
+               display: 'flex', 
+               alignItems: 'center', 
+               gap: '0.5rem',
+               marginBottom: '0.5rem'
+             }}>
+               <LinkIcon size={18} />
+               Main Social Media URL *
+             </label>
+             <input
+               type="url"
+               id="url"
+               name="url"
+               value={formData.url}
+               onChange={handleChange}
+               placeholder="https://www.youtube.com/channel/..."
+               required
+               style={{
+                 width: '100%',
+                 padding: '12px 16px',
+                 backgroundColor: 'var(--color-bg)',
+                 border: '2px solid var(--color-border)',
+                 borderRadius: 'var(--border-radius)',
+                 color: 'var(--color-text)',
+                 fontSize: '1rem',
+                 transition: 'all 0.3s ease'
+               }}
+             />
+           </div>
+           
+           {/* Social Media Links Section */}
+           <div style={{ marginTop: '2rem' }}>
+             <h3 style={{ 
+               color: 'var(--color-text)', 
+               fontSize: '1.2rem', 
+               fontWeight: '600',
+               marginBottom: '1rem',
+               textTransform: 'uppercase',
+               letterSpacing: '0.5px'
+             }}>
+               SOCIAL MEDIA LINKS
+             </h3>
+             <p style={{ 
+               color: 'var(--color-text-muted)', 
+               fontSize: '0.9rem',
+               marginBottom: '1.5rem'
+             }}>
+               Provide at least one of the creator's social media links.
+             </p>
+             
+             <div className="form-group">
+               <label htmlFor="youtube" style={{ 
+                 display: 'flex', 
+                 alignItems: 'center', 
+                 gap: '0.5rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 <Youtube size={18} />
+                 YouTube
+               </label>
+               <p style={{ 
+                 color: 'var(--color-text-muted)', 
+                 fontSize: '0.8rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 The creator's YouTube handle (without the @)
+               </p>
+               <input
+                 type="text"
+                 id="youtube"
+                 name="youtube"
+                 value={formData.youtube}
+                 onChange={handleChange}
+                 placeholder="pewdiepie"
+                 style={{
+                   width: '100%',
+                   padding: '12px 16px',
+                   backgroundColor: 'var(--color-bg)',
+                   border: '2px solid var(--color-border)',
+                   borderRadius: 'var(--border-radius)',
+                   color: 'var(--color-text)',
+                   fontSize: '1rem',
+                   transition: 'all 0.3s ease'
+                 }}
+               />
+             </div>
+             
+             <div className="form-group">
+               <label htmlFor="twitter" style={{ 
+                 display: 'flex', 
+                 alignItems: 'center', 
+                 gap: '0.5rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 <Twitter size={18} />
+                 Twitter
+               </label>
+               <p style={{ 
+                 color: 'var(--color-text-muted)', 
+                 fontSize: '0.8rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 The creator's Twitter handle (without the @)
+               </p>
+               <input
+                 type="text"
+                 id="twitter"
+                 name="twitter"
+                 value={formData.twitter}
+                 onChange={handleChange}
+                 placeholder="elonmusk"
+                 style={{
+                   width: '100%',
+                   padding: '12px 16px',
+                   backgroundColor: 'var(--color-bg)',
+                   border: '2px solid var(--color-border)',
+                   borderRadius: 'var(--border-radius)',
+                   color: 'var(--color-text)',
+                   fontSize: '1rem',
+                   transition: 'all 0.3s ease'
+                 }}
+               />
+             </div>
+             
+             <div className="form-group">
+               <label htmlFor="instagram" style={{ 
+                 display: 'flex', 
+                 alignItems: 'center', 
+                 gap: '0.5rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 <Instagram size={18} />
+                 Instagram
+               </label>
+               <p style={{ 
+                 color: 'var(--color-text-muted)', 
+                 fontSize: '0.8rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 The creator's Instagram handle (without the @)
+               </p>
+               <input
+                 type="text"
+                 id="instagram"
+                 name="instagram"
+                 value={formData.instagram}
+                 onChange={handleChange}
+                 placeholder="cristiano"
+                 style={{
+                   width: '100%',
+                   padding: '12px 16px',
+                   backgroundColor: 'var(--color-bg)',
+                   border: '2px solid var(--color-border)',
+                   borderRadius: 'var(--border-radius)',
+                   color: 'var(--color-text)',
+                   fontSize: '1rem',
+                   transition: 'all 0.3s ease'
+                 }}
+               />
+             </div>
+             
+             <div className="form-group">
+               <label htmlFor="tiktok" style={{ 
+                 display: 'flex', 
+                 alignItems: 'center', 
+                 gap: '0.5rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 <Music size={18} />
+                 TikTok
+               </label>
+               <p style={{ 
+                 color: 'var(--color-text-muted)', 
+                 fontSize: '0.8rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 The creator's TikTok handle (without the @)
+               </p>
+               <input
+                 type="text"
+                 id="tiktok"
+                 name="tiktok"
+                 value={formData.tiktok}
+                 onChange={handleChange}
+                 placeholder="charlidamelio"
+                 style={{
+                   width: '100%',
+                   padding: '12px 16px',
+                   backgroundColor: 'var(--color-bg)',
+                   border: '2px solid var(--color-border)',
+                   borderRadius: 'var(--border-radius)',
+                   color: 'var(--color-text)',
+                   fontSize: '1rem',
+                   transition: 'all 0.3s ease'
+                 }}
+               />
+             </div>
+             
+             <div className="form-group">
+               <label htmlFor="twitch" style={{ 
+                 display: 'flex', 
+                 alignItems: 'center', 
+                 gap: '0.5rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 <ExternalLink size={18} />
+                 Twitch
+               </label>
+               <p style={{ 
+                 color: 'var(--color-text-muted)', 
+                 fontSize: '0.8rem',
+                 marginBottom: '0.5rem'
+               }}>
+                 The creator's Twitch channel name
+               </p>
+               <input
+                 type="text"
+                 id="twitch"
+                 name="twitch"
+                 value={formData.twitch}
+                 onChange={handleChange}
+                 placeholder="ninja"
+                 style={{
+                   width: '100%',
+                   padding: '12px 16px',
+                   backgroundColor: 'var(--color-bg)',
+                   border: '2px solid var(--color-border)',
+                   borderRadius: 'var(--border-radius)',
+                   color: 'var(--color-text)',
+                   fontSize: '1rem',
+                   transition: 'all 0.3s ease'
+                 }}
+               />
+             </div>
+           </div>
           
           <div className="form-group">
             <label htmlFor="description" style={{ 

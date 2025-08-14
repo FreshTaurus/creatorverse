@@ -1,23 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../client';
 import { useState } from 'react';
-import { 
-  Info, 
-  Edit, 
-  Youtube, 
-  Twitter, 
-  Instagram, 
-  Music, 
-  ExternalLink,
-  AlertTriangle,
-  Trash2
-} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Info, Edit, Trash2, Youtube, Twitter, Instagram, Music, ExternalLink, AlertTriangle } from 'lucide-react';
+import { supabase } from '../client';
 
 export default function CreatorCard({ creator }) {
   const { id, name, url, description, imageURL } = creator;
-  const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -31,7 +21,6 @@ export default function CreatorCard({ creator }) {
         console.error('Error deleting creator:', error);
         alert('Error deleting creator. Please try again.');
       } else {
-        // Refresh the page to update the list
         window.location.reload();
       }
     } catch (err) {
@@ -49,6 +38,7 @@ export default function CreatorCard({ creator }) {
     if (url.includes('twitter.com') || url.includes('x.com')) return 'Twitter';
     if (url.includes('instagram.com')) return 'Instagram';
     if (url.includes('tiktok.com')) return 'TikTok';
+    if (url.includes('twitch.tv')) return 'Twitch';
     return 'Website';
   };
 
@@ -58,10 +48,13 @@ export default function CreatorCard({ creator }) {
       case 'Twitter': return <Twitter size={16} />;
       case 'Instagram': return <Instagram size={16} />;
       case 'TikTok': return <Music size={16} />;
+      case 'Twitch': return <ExternalLink size={16} />;
       default: return <ExternalLink size={16} />;
     }
   };
 
+  // For now, we'll show the main platform from the URL
+  // In a real app, you'd store multiple social media links in the database
   const platform = getSocialPlatform(url);
   const icon = getSocialIcon(platform);
 
@@ -180,46 +173,17 @@ export default function CreatorCard({ creator }) {
             </div>
           </div>
 
-          {/* Main image */}
-          {imageURL && (
-            <div style={{ 
-              marginBottom: '1rem', 
-              borderRadius: 'var(--border-radius)',
-              overflow: 'hidden',
-              aspectRatio: '16/9'
-            }}>
-              <img 
-                src={imageURL} 
-                alt={name} 
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  objectFit: 'cover' 
-                }} 
-              />
-            </div>
-          )}
-
-          {/* Creator info */}
+          {/* Creator Info */}
           <div style={{ flex: 1 }}>
             <h3 style={{ 
-              color: 'var(--color-primary)', 
               fontSize: '1.5rem', 
-              fontWeight: '600', 
-              marginBottom: '0.5rem',
+              fontWeight: '700',
+              margin: '0 0 1rem 0',
+              color: 'var(--color-primary)',
               textTransform: 'uppercase',
               letterSpacing: '0.05em'
             }}>
-              <Link 
-                to={`/creators/${id}`} 
-                style={{ 
-                  textDecoration: 'none', 
-                  color: 'inherit',
-                  transition: 'color 0.3s ease'
-                }}
-              >
-                {name}
-              </Link>
+              {name}
             </h3>
             
             {/* Social media icons */}
@@ -228,6 +192,7 @@ export default function CreatorCard({ creator }) {
               gap: '8px', 
               marginBottom: '1rem' 
             }}>
+              {/* Main platform from URL */}
               <a
                 href={url}
                 target="_blank"
@@ -257,12 +222,75 @@ export default function CreatorCard({ creator }) {
               >
                 {icon}
               </a>
+              
+              {/* Additional social media icons - show as disabled for now */}
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  opacity: 0.5,
+                  cursor: 'not-allowed'
+                }}
+                title="YouTube (coming soon)"
+              >
+                <Youtube size={16} />
+              </div>
+              
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  opacity: 0.5,
+                  cursor: 'not-allowed'
+                }}
+                title="Twitter (coming soon)"
+              >
+                <Twitter size={16} />
+              </div>
+              
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  opacity: 0.5,
+                  cursor: 'not-allowed'
+                }}
+                title="Instagram (coming soon)"
+              >
+                <Instagram size={16} />
+              </div>
             </div>
             
             <p style={{ 
-              color: 'var(--color-text-muted)', 
-              lineHeight: '1.6',
-              fontSize: '0.95rem'
+              color: 'var(--color-text-secondary)', 
+              fontSize: '0.9rem',
+              lineHeight: '1.5',
+              margin: 0,
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden'
             }}>
               {description}
             </p>
@@ -278,52 +306,78 @@ export default function CreatorCard({ creator }) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          background: 'rgba(0, 0, 0, 0.8)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
+          zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: 'var(--color-bg-secondary)',
-            border: '2px solid var(--color-primary)',
-            borderRadius: 'var(--border-radius-lg)',
+            background: 'var(--color-bg-secondary)',
             padding: '2rem',
-            maxWidth: '500px',
-            width: '100%',
+            borderRadius: 'var(--border-radius-lg)',
+            maxWidth: '400px',
+            width: '90%',
             textAlign: 'center'
           }}>
-            <div style={{ 
+            <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.5rem',
-              fontSize: '2rem', 
-              marginBottom: '1rem',
-              color: 'var(--color-danger)'
+              width: '60px',
+              height: '60px',
+              background: 'rgba(231, 76, 60, 0.2)',
+              borderRadius: '50%',
+              margin: '0 auto 1rem'
             }}>
-              <AlertTriangle size={48} />
-              <span style={{ color: 'var(--color-primary)' }}>WAIT!!!</span>
-              <AlertTriangle size={48} />
+              <AlertTriangle size={24} color="#E74C3C" />
             </div>
-            <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>
-              Are you sure you want to delete {name}???
+            <h3 style={{ 
+              color: 'var(--color-text)', 
+              margin: '0 0 1rem 0',
+              fontSize: '1.3rem'
+            }}>
+              Delete Creator
             </h3>
+            <p style={{ 
+              color: 'var(--color-text-muted)', 
+              margin: '0 0 2rem 0',
+              lineHeight: '1.5'
+            }}>
+              Are you sure you want to delete "{name}"? This action cannot be undone.
+            </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="btn btn-primary"
-                disabled={isDeleting}
+                style={{
+                  padding: '10px 20px',
+                  background: 'var(--color-border)',
+                  border: 'none',
+                  borderRadius: 'var(--border-radius)',
+                  color: 'var(--color-text)',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  transition: 'all 0.3s ease'
+                }}
               >
-                NAH, NEVER MIND
+                Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="btn btn-danger"
                 disabled={isDeleting}
+                style={{
+                  padding: '10px 20px',
+                  background: '#E74C3C',
+                  border: 'none',
+                  borderRadius: 'var(--border-radius)',
+                  color: 'white',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  fontSize: '1rem',
+                  opacity: isDeleting ? 0.7 : 1,
+                  transition: 'all 0.3s ease'
+                }}
               >
-                {isDeleting ? 'DELETING...' : 'YES! TOTALLY SURE'}
+                {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>
