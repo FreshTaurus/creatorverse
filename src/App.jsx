@@ -15,11 +15,6 @@ export default function App() {
   
   return (
     <main className="container">
-      <header>
-        <Link to="/">
-          <h1>Creatorverse</h1>
-        </Link>
-      </header>
       {routes}
     </main>
   );

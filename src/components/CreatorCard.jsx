@@ -1,6 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../client';
 import { useState } from 'react';
+import { 
+  Info, 
+  Edit, 
+  Youtube, 
+  Twitter, 
+  Instagram, 
+  Music, 
+  ExternalLink,
+  AlertTriangle,
+  Trash2
+} from 'lucide-react';
 
 export default function CreatorCard({ creator }) {
   const { id, name, url, description, imageURL } = creator;
@@ -43,11 +54,11 @@ export default function CreatorCard({ creator }) {
 
   const getSocialIcon = (platform) => {
     switch (platform) {
-      case 'YouTube': return '📺';
-      case 'Twitter': return '🐦';
-      case 'Instagram': return '📷';
-      case 'TikTok': return '🎵';
-      default: return '🔗';
+      case 'YouTube': return <Youtube size={16} />;
+      case 'Twitter': return <Twitter size={16} />;
+      case 'Instagram': return <Instagram size={16} />;
+      case 'TikTok': return <Music size={16} />;
+      default: return <ExternalLink size={16} />;
     }
   };
 
@@ -88,40 +99,83 @@ export default function CreatorCard({ creator }) {
               <button
                 onClick={() => navigate(`/creators/${id}`)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
+                  background: 'rgba(74, 144, 226, 0.2)',
+                  border: '1px solid rgba(74, 144, 226, 0.3)',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'white',
+                  color: '#4A90E2',
                   cursor: 'pointer',
-                  fontSize: '14px'
+                  transition: 'all 0.3s ease'
                 }}
                 title="View Details"
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(74, 144, 226, 0.3)';
+                  e.target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(74, 144, 226, 0.2)';
+                  e.target.style.transform = 'scale(1)';
+                }}
               >
-                ℹ️
+                <Info size={18} />
               </button>
               <button
                 onClick={() => navigate(`/creators/${id}/edit`)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'white',
                   cursor: 'pointer',
-                  fontSize: '14px'
+                  transition: 'all 0.3s ease'
                 }}
                 title="Edit"
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  e.target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'scale(1)';
+                }}
               >
-                ✏️
+                <Edit size={18} />
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                style={{
+                  background: 'rgba(231, 76, 60, 0.2)',
+                  border: '1px solid rgba(231, 76, 60, 0.3)',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#E74C3C',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                title="Delete"
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(231, 76, 60, 0.3)';
+                  e.target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(231, 76, 60, 0.2)';
+                  e.target.style.transform = 'scale(1)';
+                }}
+              >
+                <Trash2 size={18} />
               </button>
             </div>
           </div>
@@ -181,18 +235,25 @@ export default function CreatorCard({ creator }) {
                 style={{
                   background: 'rgba(255, 255, 255, 0.1)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '6px',
-                  width: '32px',
-                  height: '32px',
+                  borderRadius: '8px',
+                  width: '36px',
+                  height: '36px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'white',
                   textDecoration: 'none',
-                  fontSize: '16px',
                   transition: 'all 0.3s ease'
                 }}
                 title={`Visit ${platform}`}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'var(--color-primary)';
+                  e.target.style.transform = 'scale(1.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'scale(1)';
+                }}
               >
                 {icon}
               </a>
@@ -233,8 +294,18 @@ export default function CreatorCard({ creator }) {
             width: '100%',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-              ⚠️ <span style={{ color: 'var(--color-primary)' }}>WAIT!!!</span> ⚠️
+            <div style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              fontSize: '2rem', 
+              marginBottom: '1rem',
+              color: 'var(--color-danger)'
+            }}>
+              <AlertTriangle size={48} />
+              <span style={{ color: 'var(--color-primary)' }}>WAIT!!!</span>
+              <AlertTriangle size={48} />
             </div>
             <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>
               Are you sure you want to delete {name}???
